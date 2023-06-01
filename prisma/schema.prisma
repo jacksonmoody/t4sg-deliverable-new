@@ -13,12 +13,12 @@ datasource db {
 
 model Entries {
   id          String   @id @default(cuid())
-  category    Int
-  description String
-  link        String
   name        String
+  description String
+  category    Int
   user        String
-  user_id     String
+  user_id     String   
+  link        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

@@ -17,15 +17,13 @@ function MyApp({
 }: AppProps<{
   initialSession: Session;
 }>) {
-  // Create a new supabase browser client on every first render.
   const [supabaseClient] = useState(() => createPagesBrowserClient());
-
   return (
     <>
       <Head>
         <title>T4SG Deliverable</title>
         <meta name="description" content="T4SG Deliverable Built on T3 Tech Stack" />
-        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />

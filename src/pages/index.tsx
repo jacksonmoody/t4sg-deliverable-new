@@ -1,42 +1,66 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import GitHubIcon from "@mui/icons-material/GitHub";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { type NextPage } from "next";
+import BasicTable from "~/components/BasicTable";
+import EntryModal from "~/components/EntryModal";
 import { api } from "~/utils/api";
+import type { Entry } from "~/utils/categories";
 
 const Home: NextPage = () => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
-  const hello = api.example.hello.useQuery({ text: user?.email ?? "" });
-  const userMutation = api.example.addUser.useMutation();
+  const { data: entries } = api.main.getLoggedIn.useQuery({
+    user_id: user?.id !== undefined ? user.id : "",
+  });
+
+  const emptyEntry: Entry = {
+    name: "",
+    link: "",
+    description: "",
+    user: "",
+    category: 0,
+    user_id: "",
+    id: "",
+  };
 
   if (!user)
     return (
       <main>
-        <Auth
-          redirectTo="http://localhost:3000/"
-          appearance={{ theme: ThemeSupa }}
-          supabaseClient={supabaseClient}
-          providers={["github"]}
-          socialLayout="horizontal"
-        />
+        <div>
+          <h1>Welcome to Links for Climate Good!</h1>
+          <h3>Please sign-in with your Github account:</h3>
+          <Button
+            startIcon={<GitHubIcon />}
+            style={{
+              backgroundColor: "#333",
+              minHeight: "50px",
+            }}
+            variant="contained"
+            onClick={() => supabaseClient.auth.signInWithOAuth({ provider: "github" })}
+          >
+            Sign in with GitHub
+          </Button>
+        </div>
       </main>
     );
 
   return (
-    <>
-      <main>
-        <p>Welcome to the T4SG starter project!</p>
-        <p>
-          This starter project comes unstyled, so we recommend you add your own styling/component library. See README
-          for recommendations!
-        </p>
-        <p>{hello.data ? hello.data.greeting : "Loading tRPC query..."}</p>
-        <button onClick={() => supabaseClient.auth.signOut()}>Logout</button>
-        <button onClick={() => userMutation.mutate({ name: "New Person", email: user.email ?? "" })}>Process</button>
-      </main>
-    </>
+    <main>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={3}>
+            <EntryModal entry={emptyEntry} type="add" />
+          </Stack>
+        </Grid>
+        <Grid item xs={12}>
+          {entries && <BasicTable entries={entries} />}
+        </Grid>
+      </Grid>
+    </main>
   );
 };
 

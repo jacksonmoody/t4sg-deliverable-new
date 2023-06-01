@@ -37,7 +37,7 @@ const config = {
     ],
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }], // https://typescript-eslint.io/rules/no-unused-vars/
     "prettier/prettier": "warn", // Enables functionality offered by eslint-plugin-prettier, which runs Prettier from within ESLint. Note that this is already enabled by extending "plugin:prettier/recommended" above, but we override this in the rules array so that prettier errors throw eslint warnings instead of errors (personal preference)
-    "no-console": "warn",
+    "no-console": "off",
   },
 };
 
